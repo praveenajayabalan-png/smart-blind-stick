@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMARTSTICK AI — Intelligent Mobility & Safety System</title>
+    <meta name="description" content="AI-Based Smart Blind Stick — A cinematic scrollytelling engineering showcase featuring AI vision, 360° ultrasonic obstacle detection, GPS telemetry, and GSM SOS safety.">
+
+    <!-- Leaflet CSS for Dark Mode Vector Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- =====================================================
+         PRELOADER & STREAMING ASSET CACHE
+    ===================================================== -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-glow"></div>
+        <div class="preloader-content">
+            <div class="preloader-badge">
+                <span class="dot"></span>
+                <span>System Initializing</span>
+            </div>
+            <h1 class="preloader-title">SMARTSTICK AI</h1>
+            <div class="preloader-bar-wrap">
+                <div id="preloaderBar" class="preloader-bar"></div>
+            </div>
+            <p id="preloaderStatus" class="preloader-status">Caching 300 Optical Frames... 0%</p>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         TOP NAVIGATION BAR
+    ===================================================== -->
+    <header id="navbar" class="navbar">
+        <a href="#hero" class="nav-brand" onclick="scrollToSection('hero')">
+            <div class="nav-logo-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+            </div>
+            <div class="nav-brand-text">
+                <span class="nav-brand-title">SMARTSTICK <span>AI</span></span>
+                <span class="nav-brand-badge">MK-IV ASSISTIVE SYSTEM</span>
+            </div>
+        </a>
+
+        <ul class="nav-links">
+            <li><a class="nav-link active" onclick="scrollToSection('hero')">Overview</a></li>
+            <li><a class="nav-link" onclick="scrollToSection('hardware')">Technology</a></li>
+            <li><a class="nav-link" onclick="scrollToSection('radar')">Safety</a></li>
+            <li><a class="nav-link" onclick="scrollToSection('ai-vision')">AI Vision</a></li>
+            <li><a class="nav-link" onclick="scrollToSection('gps')">Live Tracking</a></li>
+            <li><a class="nav-link" onclick="openSpecsModal()">Specifications</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <!-- Audio Synthesizer Toggle -->
+            <button id="soundToggle" class="icon-button" title="Toggle Futuristic Soundscape" aria-label="Toggle Audio">
+                <svg id="soundIconOn" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+                <svg id="soundIconOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+            </button>
+
+            <!-- Auto Tour Play Button -->
+            <button id="autoTourBtn" class="icon-button" title="Auto-Play Cinematic Tour" aria-label="Play Tour">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+            </button>
+
+            <!-- Explore Technology CTA -->
+            <button class="btn-primary" onclick="scrollToSection('hardware')">
+                <span>Explore Technology</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- =====================================================
+         FLOATING CHAPTER NAVIGATION (RIGHT DOCK)
+    ===================================================== -->
+    <nav class="chapter-nav" aria-label="Timeline chapters">
+        <button class="chapter-nav-item active" data-chapter="0" onclick="scrollToScrollRatio(0.05)">
+            <span class="chapter-nav-label">01 Overview</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+        <button class="chapter-nav-item" data-chapter="1" onclick="scrollToScrollRatio(0.25)">
+            <span class="chapter-nav-label">02 Hardware Exploded</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+        <button class="chapter-nav-item" data-chapter="2" onclick="scrollToScrollRatio(0.50)">
+            <span class="chapter-nav-label">03 Obstacle Radar</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+        <button class="chapter-nav-item" data-chapter="3" onclick="scrollToScrollRatio(0.66)">
+            <span class="chapter-nav-label">04 AI Object Vision</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+        <button class="chapter-nav-item" data-chapter="4" onclick="scrollToScrollRatio(0.77)">
+            <span class="chapter-nav-label">05 GPS Tracking</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+        <button class="chapter-nav-item" data-chapter="5" onclick="scrollToScrollRatio(0.86)">
+            <span class="chapter-nav-label">06 GSM & SOS Alert</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+        <button class="chapter-nav-item" data-chapter="6" onclick="scrollToScrollRatio(0.92)">
+            <span class="chapter-nav-label">07 Thermal Sensing</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+        <button class="chapter-nav-item" data-chapter="7" onclick="scrollToScrollRatio(0.955)">
+            <span class="chapter-nav-label">08 Full System</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+        <button class="chapter-nav-item" data-chapter="8" onclick="scrollToScrollRatio(0.99)">
+            <span class="chapter-nav-label">09 Reassembly</span>
+            <span class="chapter-nav-dot"></span>
+        </button>
+    </nav>
+
+    <!-- =====================================================
+         MAIN SCROLL CONTAINER & STAGE
+    ===================================================== -->
+    <main id="scrollyContainer" class="scrolly-container">
+
+        <!-- Fixed Viewport Holding Canvases and Stage Effects -->
+        <div class="stage-viewport">
+            <!-- Dynamic Radial Lighting -->
+            <div id="ambientLighting" class="ambient-lighting"></div>
+
+            <!-- Tech Grid Lines -->
+            <div class="tech-grid-overlay"></div>
+
+            <!-- Scrollytelling Image Sequence Canvas -->
+            <canvas id="productCanvas" class="product-canvas"></canvas>
+
+            <!-- Subtle Atmospheric Particles -->
+            <canvas id="particlesCanvas" class="particles-canvas"></canvas>
+
+            <!-- Minimal HUD Corner Reticles -->
+            <div class="hud-corner tl"></div>
+            <div class="hud-corner tr"></div>
+            <div class="hud-corner bl"></div>
+            <div class="hud-corner br"></div>
+
+            <!-- Bottom Live Telemetry HUD Bar -->
+            <div class="hud-bottom-telemetry">
+                <div class="hud-telemetry-item">
+                    <span class="label">FRAME</span>
+                    <span id="hudFrameNumber" class="value">001 / 300</span>
+                </div>
+                <div class="hud-telemetry-sep"></div>
+                <div class="hud-telemetry-item">
+                    <span class="label">STATUS</span>
+                    <span id="hudSystemStatus" class="value">ONLINE</span>
+                </div>
+                <div class="hud-telemetry-sep"></div>
+                <div class="hud-telemetry-item">
+                    <span class="label">MCU</span>
+                    <span class="value">ESP32 240MHz</span>
+                </div>
+                <div class="hud-telemetry-sep"></div>
+                <div class="hud-telemetry-item">
+                    <span class="label">AI ENGINE</span>
+                    <span class="value">ACTIVE (30 FPS)</span>
+                </div>
+                <div class="hud-telemetry-sep"></div>
+                <div class="hud-telemetry-item">
+                    <span class="label">SATELLITES</span>
+                    <span id="hudSats" class="value">11 LOCKED</span>
+                </div>
+            </div>
+
+            <!-- =====================================================
+                 STORY LAYERS (FADE IN/OUT BASED ON SCROLL RATIO)
+            ===================================================== -->
+            <div class="story-layers">
+
+                <!-- -------------------------------------------------
+                     01: HERO STORY (0 - 15% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-hero" class="story-section active" data-range="0,0.15">
+                    <div class="story-content">
+                        <div class="tech-tag">
+                            <span class="tag-indicator"></span>
+                            <span>MK-IV INTELLIGENT ASSISTIVE SYSTEM</span>
+                        </div>
+                        <h2 class="story-headline">
+                            AI That Guides <br><span class="gradient-text">Every Step.</span>
+                        </h2>
+                        <h3 class="story-subheadline">
+                            An intelligent smart blind stick designed for safer, smarter, and more connected mobility.
+                        </h3>
+                        <p class="story-desc">
+                            AI-powered object detection, real-time obstacle monitoring, GPS tracking, GSM communication, temperature monitoring, and instant SOS assistance — integrated into one intelligent assistive device.
+                        </p>
+                        <div class="hero-cta-group">
+                            <button class="btn-primary" onclick="scrollToSection('hardware')">
+                                <span>Explore Hardware</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <button class="btn-secondary" onclick="openSpecsModal()">
+                                <span>View Specifications</span>
+                            </button>
+                        </div>
+                        <div class="hero-specs-row">
+                            <div class="hero-spec-pill">
+                                <span class="spec-label">Obstacle Sensing</span>
+                                <span class="spec-val">3-Way Sonar</span>
+                            </div>
+                            <div class="hero-spec-pill">
+                                <span class="spec-label">Neural Engine</span>
+                                <span class="spec-val">On-Device AI</span>
+                            </div>
+                            <div class="hero-spec-pill">
+                                <span class="spec-label">Positioning</span>
+                                <span class="spec-val">NEO-6M GPS</span>
+                            </div>
+                            <div class="hero-spec-pill">
+                                <span class="spec-label">Cellular Link</span>
+                                <span class="spec-val">SIM800L GSM</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- -------------------------------------------------
+                     02: ENGINEERING REVEAL (15 - 40% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-hardware" class="story-section" data-range="0.15,0.40">
+                    <div class="story-content">
+                        <div class="tech-tag">
+                            <span class="tag-indicator"></span>
+                            <span>AEROSPACE-GRADE ARCHITECTURE</span>
+                        </div>
+                        <h2 class="story-headline">
+                            Intelligence, Built Into <br><span class="gradient-text">Every Layer.</span>
+                        </h2>
+                        <p class="story-desc">
+                            Every component works together as one connected safety system. Outer casing detaches to unveil precision engineering, multi-layer circuit traces, and dual-core edge processing.
+                        </p>
+                        <div class="hardware-callouts">
+                            <div class="hardware-callout-card" onclick="openSpecDetail('esp32')">
+                                <div class="callout-icon-box">⚡</div>
+                                <div class="callout-meta">
+                                    <span class="callout-name">ESP32</span>
+                                    <span class="callout-role">Central Controller</span>
+                                </div>
+                            </div>
+                            <div class="hardware-callout-card" onclick="openSpecDetail('ultrasonic')">
+                                <div class="callout-icon-box">📡</div>
+                                <div class="callout-meta">
+                                    <span class="callout-name">Ultrasonic</span>
+                                    <span class="callout-role">Obstacle Detection</span>
+                                </div>
+                            </div>
+                            <div class="hardware-callout-card" onclick="openSpecDetail('ai-vision')">
+                                <div class="callout-icon-box">👁️</div>
+                                <div class="callout-meta">
+                                    <span class="callout-name">AI Vision</span>
+                                    <span class="callout-role">Object Recognition</span>
+                                </div>
+                            </div>
+                            <div class="hardware-callout-card" onclick="openSpecDetail('gps')">
+                                <div class="callout-icon-box">🛰️</div>
+                                <div class="callout-meta">
+                                    <span class="callout-name">GPS</span>
+                                    <span class="callout-role">Live Location</span>
+                                </div>
+                            </div>
+                            <div class="hardware-callout-card" onclick="openSpecDetail('gsm')">
+                                <div class="callout-icon-box">📶</div>
+                                <div class="callout-meta">
+                                    <span class="callout-name">GSM</span>
+                                    <span class="callout-role">Emergency Communication</span>
+                                </div>
+                            </div>
+                            <div class="hardware-callout-card" onclick="openSpecDetail('sos')">
+                                <div class="callout-icon-box">🚨</div>
+                                <div class="callout-meta">
+                                    <span class="callout-name">SOS</span>
+                                    <span class="callout-role">Instant Alert</span>
+                                </div>
+                            </div>
+                            <div class="hardware-callout-card" onclick="openSpecDetail('temp')">
+                                <div class="callout-icon-box">🌡️</div>
+                                <div class="callout-meta">
+                                    <span class="callout-name">Temperature</span>
+                                    <span class="callout-role">Environmental Monitoring</span>
+                                </div>
+                            </div>
+                            <div class="hardware-callout-card" onclick="openSpecDetail('battery')">
+                                <div class="callout-icon-box">🔋</div>
+                                <div class="callout-meta">
+                                    <span class="callout-name">Li-ion 3500mAh</span>
+                                    <span class="callout-role">All-Day Power System</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- -------------------------------------------------
+                     03: OBSTACLE DETECTION (40 - 60% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-radar" class="story-section" data-range="0.40,0.60">
+                    <div class="story-content">
+                        <div class="tech-tag">
+                            <span class="tag-indicator"></span>
+                            <span>TRIPLE-DIRECTION 40kHz SONAR</span>
+                        </div>
+                        <h2 class="story-headline">
+                            See Obstacles Before <br><span class="gradient-text">They Become Problems.</span>
+                        </h2>
+                        <p class="story-desc">
+                            Three-direction ultrasonic sensing continuously monitors the surrounding environment and helps identify nearby obstacles in real time. Dynamic radial waves and 3D proximity fields detect hazards across left, front, and right trajectories.
+                        </p>
+                        
+                        <div class="radar-interactive-panel">
+                            <div class="radar-tri-sensors">
+                                <div class="sensor-gauge-card" id="cardLeftSensor">
+                                    <span class="sensor-direction-tag">LEFT SENSOR</span>
+                                    <div class="sensor-reading">
+                                        <span id="distLeft">82</span><small>cm</small>
+                                    </div>
+                                    <span class="sensor-status-badge">CLEAR</span>
+                                </div>
+                                <div class="sensor-gauge-card warning" id="cardFrontSensor">
+                                    <span class="sensor-direction-tag">FRONT SENSOR</span>
+                                    <div class="sensor-reading">
+                                        <span id="distFront">46</span><small>cm</small>
+                                    </div>
+                                    <span class="sensor-status-badge">WARNING PULSE</span>
+                                </div>
+                                <div class="sensor-gauge-card" id="cardRightSensor">
+                                    <span class="sensor-direction-tag">RIGHT SENSOR</span>
+                                    <div class="sensor-reading">
+                                        <span id="distRight">127</span><small>cm</small>
+                                    </div>
+                                    <span class="sensor-status-badge">CLEAR</span>
+                                </div>
+                            </div>
+
+                            <!-- Animated Spatial Radar Graphic -->
+                            <div class="radar-canvas-wrap">
+                                <canvas id="radarCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- -------------------------------------------------
+                     04: AI OBJECT DETECTION (60 - 72% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-ai-vision" class="story-section" data-range="0.60,0.72">
+                    <div class="story-content">
+                        <div class="tech-tag violet">
+                            <span class="tag-indicator"></span>
+                            <span>EDGE NEURAL VISION PROCESSOR</span>
+                        </div>
+                        <h2 class="story-headline">
+                            Artificial Intelligence That <br><span class="gradient-text" style="background: linear-gradient(135deg, #fff 40%, #7C5CFF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Understands the Path.</span>
+                        </h2>
+                        <p class="story-desc">
+                            AI-powered object detection analyzes the environment and identifies important objects around the user, providing an additional layer of situational awareness with millisecond latency.
+                        </p>
+
+                        <!-- Futuristic Computer Vision Viewfinder -->
+                        <div class="ai-viewfinder-hud">
+                            <div class="ai-scanline"></div>
+                            <div class="ai-hud-header">
+                                <span>CAM-01 // HDR ULTRA-WIDE</span>
+                                <div class="ai-hud-fps">
+                                    <span class="dot" style="background:#7C5CFF; width:5px; height:5px; border-radius:50%;"></span>
+                                    <span>TFLite NPU: 32.4 FPS</span>
+                                </div>
+                            </div>
+
+                            <div class="ai-bounding-boxes">
+                                <div class="ai-box" style="top: 25%; left: 14%; width: 28%; height: 50%;">
+                                    <span class="ai-box-tag">PERSON — 96%</span>
+                                </div>
+                                <div class="ai-box" style="top: 35%; right: 12%; width: 34%; height: 42%;">
+                                    <span class="ai-box-tag">VEHICLE — 91%</span>
+                                </div>
+                                <div class="ai-box critical" style="bottom: 12%; left: 42%; width: 22%; height: 30%;">
+                                    <span class="ai-box-tag">STAIRCASE — 94%</span>
+                                </div>
+                            </div>
+
+                            <div class="ai-hud-footer">
+                                <div class="ai-targets-list">
+                                    <span class="ai-target-chip active" onclick="simulateAiClass('PERSON')">PERSON 96%</span>
+                                    <span class="ai-target-chip" onclick="simulateAiClass('VEHICLE')">VEHICLE 91%</span>
+                                    <span class="ai-target-chip" onclick="simulateAiClass('CHAIR')">CHAIR 88%</span>
+                                    <span class="ai-target-chip" onclick="simulateAiClass('STAIRS')">STAIRCASE 94%</span>
+                                    <span class="ai-target-chip" onclick="simulateAiClass('OBSTACLE')">OBSTACLE 97%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- -------------------------------------------------
+                     05: GPS LIVE LOCATION (72 - 82% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-gps" class="story-section" data-range="0.72,0.82">
+                    <div class="story-content">
+                        <div class="tech-tag emerald">
+                            <span class="tag-indicator"></span>
+                            <span>NEO-6M SATELLITE ENGINE</span>
+                        </div>
+                        <h2 class="story-headline">
+                            Always Know <br><span class="gradient-text" style="background: linear-gradient(135deg, #fff 40%, #00E5A8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Where You Are.</span>
+                        </h2>
+                        <p class="story-desc">
+                            Real-time GPS tracking enables the user's location to be monitored remotely, providing additional confidence for caregivers and emergency situations.
+                        </p>
+
+                        <!-- Dark Mode Map Frame -->
+                        <div class="gps-hud-container">
+                            <div class="gps-map-frame">
+                                <div id="gpsLeafletMap"></div>
+                                <div class="gps-map-overlay-badge">
+                                    <span class="pulse-circle"></span>
+                                    <span>LIVE LOCATION // GPS ACTIVE</span>
+                                </div>
+                            </div>
+
+                            <div class="gps-telemetry-grid">
+                                <div class="gps-telemetry-cell">
+                                    <span class="cell-title">LATITUDE</span>
+                                    <div class="cell-val" id="telemetryLat">13.0827° N</div>
+                                </div>
+                                <div class="gps-telemetry-cell">
+                                    <span class="cell-title">LONGITUDE</span>
+                                    <div class="cell-val" id="telemetryLng">80.2707° E</div>
+                                </div>
+                                <div class="gps-telemetry-cell">
+                                    <span class="cell-title">ACCURACY</span>
+                                    <div class="cell-val">± 1.8 m</div>
+                                </div>
+                                <div class="gps-telemetry-cell">
+                                    <span class="cell-title">GEOFENCE</span>
+                                    <div class="cell-val" style="color:var(--accent-gps);">SECURE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- -------------------------------------------------
+                     06: GSM + SOS EMERGENCY (82 - 90% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-sos" class="story-section" data-range="0.82,0.90">
+                    <div class="story-content">
+                        <div class="tech-tag crimson">
+                            <span class="tag-indicator"></span>
+                            <span>FAIL-SAFE CELLULAR UPLINK</span>
+                        </div>
+                        <h2 class="story-headline">
+                            One Press. <br><span class="gradient-text" style="background: linear-gradient(135deg, #fff 40%, #FF4D4D 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Immediate Connection.</span>
+                        </h2>
+                        <p class="story-desc">
+                            When an emergency occurs, the SOS button can trigger an immediate communication alert through the GSM system. Broadcasts encrypted SMS and direct voice uplink with precise GPS coordinates.
+                        </p>
+
+                        <div class="sos-hud-panel">
+                            <!-- Signal Pipeline Flow -->
+                            <div class="sos-pipeline-flow">
+                                <div class="flow-node active">
+                                    <div class="flow-node-icon">🦯</div>
+                                    <span class="flow-node-title">SMART BLIND STICK</span>
+                                </div>
+                                <div class="flow-arrow-line"></div>
+                                <div class="flow-node active">
+                                    <div class="flow-node-icon">📶</div>
+                                    <span class="flow-node-title">GSM NETWORK</span>
+                                </div>
+                                <div class="flow-arrow-line"></div>
+                                <div class="flow-node active">
+                                    <div class="flow-node-icon">👨‍👩‍👧</div>
+                                    <span class="flow-node-title">CAREGIVER</span>
+                                </div>
+                            </div>
+
+                            <div class="sos-actions-row">
+                                <button id="sosSimulateBtn" class="sos-trigger-btn" onclick="triggerSosSimulation()">
+                                    <span>🚨 PRESS SOS BUTTON</span>
+                                </button>
+                                <div class="sos-hologram-card">
+                                    <span class="card-head" id="sosAlertStatus">STANDBY // READY</span>
+                                    <span class="card-body" id="sosAlertDesc">Dual-carrier redundancy enabled. Press to test.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- -------------------------------------------------
+                     07: TEMPERATURE MONITORING (90 - 94% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-temp" class="story-section" data-range="0.90,0.94">
+                    <div class="story-content">
+                        <div class="tech-tag amber">
+                            <span class="tag-indicator"></span>
+                            <span>ENVIRONMENTAL SENSING ARRAY</span>
+                        </div>
+                        <h2 class="story-headline">
+                            More Than <br><span class="gradient-text" style="background: linear-gradient(135deg, #fff 40%, #FFAA00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Mobility.</span>
+                        </h2>
+                        <p class="story-desc">
+                            Environmental temperature monitoring adds another layer of useful real-time information to the connected assistive system, warning users of extreme heat, cold, or sudden temperature anomalies.
+                        </p>
+
+                        <div class="temp-gauge-container">
+                            <div class="temp-primary-dial">
+                                <span class="temp-value-display">28.6°</span>
+                                <span class="temp-unit">CELSIUS</span>
+                            </div>
+
+                            <div class="temp-climate-metrics">
+                                <div class="temp-metric-row">
+                                    <span class="metric-label">STATUS</span>
+                                    <span class="metric-val" style="color:var(--accent-amber);">SENSOR ACTIVE</span>
+                                </div>
+                                <div class="temp-metric-row">
+                                    <span class="metric-label">HEAT INDEX</span>
+                                    <span class="metric-val">MODERATE (30.1°C)</span>
+                                </div>
+                                <div class="temp-metric-row">
+                                    <span class="metric-label">THERMAL STATUS</span>
+                                    <span class="metric-val" style="color:var(--accent-gps);">OPTIMAL AMBIENT</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- -------------------------------------------------
+                     08: FULL SYSTEM VISUALIZATION (94 - 97% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-system" class="story-section" data-range="0.94,0.97">
+                    <div class="story-content center-align">
+                        <div class="tech-tag">
+                            <span class="tag-indicator"></span>
+                            <span>UNIFIED EMBEDDED ECOSYSTEM</span>
+                        </div>
+                        <h2 class="story-headline">
+                            Everything Connected. <br><span class="gradient-text">One Intelligent System.</span>
+                        </h2>
+                        <p class="story-desc">
+                            Sensors, AI vision, location tracking, and telecommunication hardware stream real-time data into the ESP32 processing core, synchronizing protection for the user at all times.
+                        </p>
+
+                        <div class="system-pipeline-grid">
+                            <div class="pipeline-step-box">
+                                <span class="pipeline-step-num">01</span>
+                                <span class="pipeline-step-name">SENSING</span>
+                                <span class="pipeline-step-desc">Ultrasonic & Thermal Transducers</span>
+                            </div>
+                            <div class="pipeline-step-box">
+                                <span class="pipeline-step-num">02</span>
+                                <span class="pipeline-step-name">PROCESSING</span>
+                                <span class="pipeline-step-desc">ESP32 Dual-Core 240MHz MCU</span>
+                            </div>
+                            <div class="pipeline-step-box">
+                                <span class="pipeline-step-num">03</span>
+                                <span class="pipeline-step-name">INTELLIGENCE</span>
+                                <span class="pipeline-step-desc">Neural Vision Object Classifier</span>
+                            </div>
+                            <div class="pipeline-step-box">
+                                <span class="pipeline-step-num">04</span>
+                                <span class="pipeline-step-name">COMMUNICATION</span>
+                                <span class="pipeline-step-desc">GPS Telemetry & GSM Uplink</span>
+                            </div>
+                            <div class="pipeline-step-box">
+                                <span class="pipeline-step-num">05</span>
+                                <span class="pipeline-step-name">ASSISTANCE</span>
+                                <span class="pipeline-step-desc">Haptic & Audio Guidance</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- -------------------------------------------------
+                     09: REASSEMBLY & HERO FINALE (97 - 100% SCROLL)
+                -------------------------------------------------- -->
+                <section id="section-reassembly" class="story-section" data-range="0.97,1.0">
+                    <div class="story-content center-align">
+                        <div class="finale-badge-row">
+                            <span class="finale-tag">REASSEMBLED</span>
+                            <span class="finale-tag">IP67 WEATHERPROOF</span>
+                            <span class="finale-tag">READY FOR DEPLOYMENT</span>
+                        </div>
+                        <h2 class="story-headline">
+                            Technology That <br><span class="gradient-text">Moves With You.</span>
+                        </h2>
+                        <h3 class="story-subheadline">
+                            AI-Based Smart Blind Stick — Intelligent Assistance for Safer Mobility.
+                        </h3>
+                        <div class="finale-tagline">
+                            Sense. Understand. Connect. Protect.
+                        </div>
+
+                        <div class="finale-cta-group">
+                            <button class="btn-primary" onclick="scrollToScrollRatio(0.25)">
+                                <span>Explore the Technology</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                            </button>
+                            <button class="btn-secondary" onclick="openArchitectureModal()">
+                                <span>View System Architecture</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- =====================================================
+         HARDWARE SPECIFICATIONS MODAL
+    ===================================================== -->
+    <div id="specsModal" class="modal-backdrop" onclick="closeSpecsModal(event)">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <h3>Engineering Specifications</h3>
+                    <p>MK-IV Smart Blind Stick Hardware Architecture</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeSpecsModalDirect()" aria-label="Close modal">✕</button>
+            </div>
+            <div class="modal-content-body">
+                <div class="specs-category-title">
+                    <span>⚡ Central Processing & Control</span>
+                </div>
+                <div class="specs-table-grid">
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Microcontroller</span>
+                        <div class="spec-cell-val">ESP32-WROOM-32D</div>
+                        <div class="spec-cell-detail">Dual-core Xtensa 32-bit LX6 @ 240MHz, 520KB SRAM, FreeRTOS kernel</div>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Wireless Connectivity</span>
+                        <div class="spec-cell-val">Wi-Fi 802.11 b/g/n + BLE 5.0</div>
+                        <div class="spec-cell-detail">OTA firmware updates and low-latency smartphone pairing</div>
+                    </div>
+                </div>
+
+                <div class="specs-category-title">
+                    <span>📡 Sensing & Detection Array</span>
+                </div>
+                <div class="specs-table-grid">
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Ultrasonic Transducers</span>
+                        <div class="spec-cell-val">Triple 40kHz Sonar Array</div>
+                        <div class="spec-cell-detail">Left (45°), Front (0°), Right (45°) coverage; 2cm to 400cm range with ±3mm accuracy</div>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Computer Vision Sensor</span>
+                        <div class="spec-cell-val">OV2640 + Neural Edge Coprocessor</div>
+                        <div class="spec-cell-detail">120° ultra-wide FOV, real-time object classification at 30+ FPS</div>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Satellite Positioning</span>
+                        <div class="spec-cell-val">u-blox NEO-6M GPS Engine</div>
+                        <div class="spec-cell-detail">50-channel receiver, 2.5m CEP precision, integrated ceramic patch antenna</div>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Environmental Thermistor</span>
+                        <div class="spec-cell-val">Digital Temperature Sensor</div>
+                        <div class="spec-cell-detail">-40°C to +85°C measurement range with ±0.5°C calibrated accuracy</div>
+                    </div>
+                </div>
+
+                <div class="specs-category-title">
+                    <span>📶 Telemetry, Safety & Power</span>
+                </div>
+                <div class="specs-table-grid">
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Cellular Link</span>
+                        <div class="spec-cell-val">SIM800L Quad-Band GSM/GPRS</div>
+                        <div class="spec-cell-detail">850/900/1800/1900MHz, instant emergency SMS and caregiver voice channel</div>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Battery & Power</span>
+                        <div class="spec-cell-val">3500mAh 3.7V Lithium-Ion</div>
+                        <div class="spec-cell-detail">Up to 18 hours active continuous usage; USB-C fast charge with BMS protection</div>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Haptic & Audio Feedback</span>
+                        <div class="spec-cell-val">LRA Motor + 85dB Resonant Piezo</div>
+                        <div class="spec-cell-detail">Dual-mode tactile pulses for directional hazard warning</div>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-cell-label">Chassis & Protection</span>
+                        <div class="spec-cell-val">Aviation Magnesium Alloy</div>
+                        <div class="spec-cell-detail">Total weight 420g; IP67 water and dust resistance, shock-dampening tip</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         SYSTEM ARCHITECTURE MODAL
+    ===================================================== -->
+    <div id="architectureModal" class="modal-backdrop" onclick="closeArchitectureModal(event)">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <h3>System Architecture & Data Flow</h3>
+                    <p>End-to-End Hardware Integration & Embedded Pipeline</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeArchitectureModalDirect()" aria-label="Close modal">✕</button>
+            </div>
+            <div class="modal-content-body">
+                <div style="background: rgba(0,0,0,0.5); padding: 24px; border-radius: 14px; border: 1px solid var(--border-hairline); margin-bottom: 24px;">
+                    <div class="specs-category-title" style="margin-bottom: 12px;">Data Pipeline Topology</div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                        The system operates on an asynchronous FreeRTOS architecture. <strong>Core 0</strong> is dedicated to real-time deterministic sensor polling (ultrasonic sonar echo capture via input capture interrupts and I2C temperature telemetry). <strong>Core 1</strong> manages the Edge AI neural network inference pipeline, GPS NMEA parsing, and SIM800L AT command state machine for cellular dispatch.
+                    </p>
+                </div>
+
+                <div class="system-pipeline-grid" style="margin-top:0;">
+                    <div class="pipeline-step-box">
+                        <span class="pipeline-step-num">INPUT</span>
+                        <span class="pipeline-step-name">Sonar & Vision</span>
+                        <span class="pipeline-step-desc">Echo timings & raw 120° frames</span>
+                    </div>
+                    <div class="pipeline-step-box">
+                        <span class="pipeline-step-num">DMA</span>
+                        <span class="pipeline-step-name">ESP32 Buffer</span>
+                        <span class="pipeline-step-desc">Zero-copy DMA memory transfer</span>
+                    </div>
+                    <div class="pipeline-step-box">
+                        <span class="pipeline-step-num">INFERENCE</span>
+                        <span class="pipeline-step-name">Neural Engine</span>
+                        <span class="pipeline-step-desc">TFLite quantized object detection</span>
+                    </div>
+                    <div class="pipeline-step-box">
+                        <span class="pipeline-step-num">HAPTIC</span>
+                        <span class="pipeline-step-name">Guidance Actuator</span>
+                        <span class="pipeline-step-desc">Directional vibration frequency</span>
+                    </div>
+                    <div class="pipeline-step-box">
+                        <span class="pipeline-step-num">UPLINK</span>
+                        <span class="pipeline-step-name">Cloud & Caregiver</span>
+                        <span class="pipeline-step-desc">GSM alert & live GPS telemetry</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS for Map -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
